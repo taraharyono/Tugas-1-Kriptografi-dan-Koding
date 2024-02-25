@@ -27,6 +27,44 @@ def playfairEncrypt(msg, k):
     return encrypted_message
 
 
+def playfairDecrypt(msg, k):
+    key_matrix = playfairSquare(generateKey(k))
+    bigram = charToBigram(msg)
+    result_bigram = []
+    for i in range(len(bigram)):
+        res = []
+        pos1 = findInPlayfairSquare(key_matrix, bigram[i][0])
+        pos2 = findInPlayfairSquare(key_matrix, bigram[i][1])
+        ## same row
+        if pos1[0] == pos2[0]:
+            res.append(key_matrix[pos1[0]][(pos1[1]-1)%5])
+            res.append(key_matrix[pos2[0]][(pos2[1]-1)%5])
+        ## same column
+        elif pos1[1] == pos2[1]:
+            res.append(key_matrix[(pos1[0]-1)%5][pos1[1]])
+            res.append(key_matrix[(pos2[0]-1)%5][pos2[1]])
+        else:
+            res.append(key_matrix[pos1[0]][pos2[1]])
+            res.append(key_matrix[pos2[0]][pos1[1]])
+        result_bigram.append(res)
+
+    decrypted_message = ""
+    for bigram in result_bigram:
+        for char in bigram:
+            decrypted_message += char
+        
+    return decrypted_message
+
+
+def charToBigram(word):
+    if len(word) % 2 == 0:
+        bigram = [["" for i in range(2)] for i in range(len(word) // 2)]
+        k = 0
+        for i in range(len(word) // 2):
+            for j in range(2):
+                bigram[i][j] = word[k]
+                k += 1
+        return bigram
 
 def generateKey(k):
     key = k.replace(" ", "").replace("j", "")
@@ -50,18 +88,14 @@ def playfairSquare(key):
 
 def formatMessage(msg):
     message = msg.replace(" ", "").replace("j", "i")
+    result = message
     for i in range(0, len(message), 2):
         if (i+1) != len(message):
             if message[i] == message[i+1]:
                 result = message[:i+1] + "x" + message[i+1:]
     if len(result) % 2 == 1:
         result += "x"
-    bigram = [["" for i in range(2)] for i in range(len(result) // 2)]
-    k = 0
-    for i in range(len(result) // 2):
-        for j in range(2):
-            bigram[i][j] = result[k]
-            k += 1
+    bigram = charToBigram(result)
     return bigram
 
 def findInPlayfairSquare(matrix, char):
@@ -69,5 +103,3 @@ def findInPlayfairSquare(matrix, char):
         for j in range(5):
             if matrix[i][j] == char:
                 return (i, j)
-            
-playfairEncrypt("temui ibu nanti malam", "jalan ganesha sepuluh")
