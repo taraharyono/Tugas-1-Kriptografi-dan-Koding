@@ -1,1 +1,1 @@
-print(chr(108))
+print(len("departemen teknik informatika itb"))
