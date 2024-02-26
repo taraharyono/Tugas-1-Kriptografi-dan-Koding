@@ -5,7 +5,7 @@ def encrypt(plain, key):
     temp_cipher = 0
     cipher = ''
     plain = plain.lower()
-    plain = plain.replace(" ", "")
+    plain = ''.join(char for char in plain if char.isalpha())
     while i < len(plain):
         for j in key:
             temp_cipher = ((ord(plain[i]) - 96) + (ord(j.lower()) - 96) - 1) % 26
@@ -20,7 +20,7 @@ def encrypt(plain, key):
 def decrypt(cipher, key):
     i = 0
     cipher = cipher.lower()
-    cipher = cipher.replace(" ", "")
+    cipher = ''.join(char for char in cipher if char.isalpha())
     temp_plain = 0
     plain = ''
     while i < len(cipher):
