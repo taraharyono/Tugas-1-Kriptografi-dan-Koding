@@ -77,7 +77,7 @@ class EncryptionApp:
         self.output_text.grid(row=8, column=1, padx=5, pady=5, columnspan=2)
 
         self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
-        self.save_button.grid(row=8, column=1, padx=5, pady=5)
+        self.save_button.grid(row=9, column=1, padx=5, pady=5)
     
 
     def toggle_input(self, *args):
