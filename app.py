@@ -34,44 +34,47 @@ class EncryptionApp:
         self.file_label = ttk.Label(master, text="")
         self.file_label.grid(row=1, column=2, padx=5, pady=5, sticky="w")
 
+        self.file_content_label = ttk.Label(master, text="")
+        self.file_content_label.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+
         self.choice_label = ttk.Label(master, text="Choose Action:")
-        self.choice_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        self.choice_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
 
         self.choice_var = tk.StringVar()
         self.choice_var.set("Encrypt")
         self.choice_menu = ttk.OptionMenu(master, self.choice_var, "Encrypt", "Encrypt", "Decrypt", command=self.toggle_column_key)
-        self.choice_menu.grid(row=2, column=1, padx=5, pady=5)
+        self.choice_menu.grid(row=3, column=1, padx=5, pady=5)
 
         self.technique_label = ttk.Label(master, text="Choose Technique:")
-        self.technique_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
+        self.technique_label.grid(row=4, column=0, padx=5, pady=5, sticky="w")
 
         self.technique_var = tk.StringVar()
         self.technique_var.set("Vigenere Standard")
         self.technique_menu = ttk.OptionMenu(master, self.technique_var, "Vigenere Standard", "Vigenere Standard", "Extended Vigenere", "Playfair Cipher","Product Cipher", command=self.toggle_column_key)
-        self.technique_menu.grid(row=3, column=1, padx=5, pady=5)
+        self.technique_menu.grid(row=4, column=1, padx=5, pady=5)
 
         self.key_label = ttk.Label(master, text="Key:")
-        self.key_label.grid(row=4, column=0, padx=5, pady=5, sticky="w")
+        self.key_label.grid(row=5, column=0, padx=5, pady=5, sticky="w")
 
         self.key_entry = ttk.Entry(master)
-        self.key_entry.grid(row=4, column=1, padx=5, pady=5)
+        self.key_entry.grid(row=5, column=1, padx=5, pady=5)
 
         self.column_key_label = ttk.Label(master, text="Column Key:")
-        self.column_key_label.grid(row=5, column=0, padx=5, pady=5, sticky="w")
+        self.column_key_label.grid(row=6, column=0, padx=5, pady=5, sticky="w")
 
         self.column_key_entry = ttk.Entry(master)
-        self.column_key_entry.grid(row=5, column=1, padx=5, pady=5)
+        self.column_key_entry.grid(row=6, column=1, padx=5, pady=5)
         self.column_key_label.grid_remove()
         self.column_key_entry.grid_remove()
 
         self.process_button = ttk.Button(master, text="Process", command=self.process)
-        self.process_button.grid(row=6, column=1, padx=5, pady=5)
+        self.process_button.grid(row=7, column=1, padx=5, pady=5)
 
         self.output_label = ttk.Label(master, text="Output:")
-        self.output_label.grid(row=7, column=0, padx=5, pady=5, sticky="w")
+        self.output_label.grid(row=8, column=0, padx=5, pady=5, sticky="w")
 
         self.output_text = tk.Text(master, height=5, width=40)
-        self.output_text.grid(row=7, column=1, padx=5, pady=5, columnspan=2)
+        self.output_text.grid(row=8, column=1, padx=5, pady=5, columnspan=2)
 
         self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
         self.save_button.grid(row=8, column=1, padx=5, pady=5)
@@ -82,6 +85,9 @@ class EncryptionApp:
         if input_type == "Text":
             self.input_text.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
             self.input_file_button.grid_remove()
+            self.file_label.grid_remove()
+            self.input_text.delete("1.0", tk.END)
+            self.file_content_label.grid_remove()
         elif input_type == "File":
             self.input_text.grid_remove()
             self.input_file_button.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
@@ -92,12 +98,14 @@ class EncryptionApp:
         if technique == "Product Cipher":
             self.column_key_label.grid()
             self.column_key_entry.grid()
+            self.column_key_entry.config(validate="key", validatecommand=(self.master.register(self.validate_column_key), "%P"))
         else:
             self.column_key_label.grid_remove()
             self.column_key_entry.grid_remove()
+            self.column_key_entry.config(validate="none")
 
     def open_file(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+        file_path = filedialog.askopenfilename()
         if file_path:
             with open(file_path, "r") as file:
                 content = file.read()
@@ -118,6 +126,9 @@ class EncryptionApp:
             with open(file_path, "w") as file:
                 file.write(output_text)
             messagebox.showinfo("Success", "Output saved successfully.")
+            self.file_content_label.config(text="File Content:\n" + content)
+        else:
+            self.file_label.grid_remove()
                 
     def process(self):
         input_text = self.input_text.get("1.0", "end-1c")
@@ -160,7 +171,16 @@ class EncryptionApp:
 
         self.output_text.delete("1.0", tk.END)
         self.output_text.insert(tk.END, encrypted_text)
-
+        
+    def validate_column_key(self, new_text):
+        try:
+            if new_text == "":
+                return True
+            int(new_text)
+            return True
+        except ValueError:
+            return False
+        
 def main():
     root = tk.Tk()
     app = EncryptionApp(root)
