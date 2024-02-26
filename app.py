@@ -29,7 +29,10 @@ class EncryptionApp:
         self.input_text.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
         
         self.input_file_button = ttk.Button(master, text="Open File", command=self.open_file)
-        ## self.input_file_button.grid(row=0, column=3, padx=5, pady=5)
+        # self.input_file_button.grid(row=1, column=2, padx=5, pady=5)
+        
+        self.file_label = ttk.Label(master, text="")
+        self.file_label.grid(row=1, column=2, padx=5, pady=5, sticky="w")
 
         self.choice_label = ttk.Label(master, text="Choose Action:")
         self.choice_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
@@ -97,6 +100,9 @@ class EncryptionApp:
                 content = file.read()
                 self.input_text.delete("1.0", tk.END)
                 self.input_text.insert("1.0", content)
+            
+            # Update file label to display the filename
+            self.file_label.config(text="File: " + file_path)
                 
     def process(self):
         input_text = self.input_text.get("1.0", "end-1c")
@@ -118,10 +124,11 @@ class EncryptionApp:
             else:
                 encrypted_text = standardVigenere.decrypt(input_text, key)
         elif technique == "Product Cipher":
+            column_key = int(self.column_key_entry.get())
             if choice == "Encrypt":
-                encrypted_text = productCipher.encrypt(input_text, key)
+                encrypted_text = productCipher.encrypt(input_text, column_key, key)
             else:
-                encrypted_text = productCipher.decrypt(input_text, key)
+                encrypted_text = productCipher.decrypt(input_text, column_key, key)
         elif technique == "Extended Vigenere":
             if choice == "Encrypt":
                 encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
