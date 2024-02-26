@@ -72,6 +72,9 @@ class EncryptionApp:
 
         self.output_text = tk.Text(master, height=5, width=40)
         self.output_text.grid(row=7, column=1, padx=5, pady=5, columnspan=2)
+
+        self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
+        self.save_button.grid(row=8, column=1, padx=5, pady=5)
     
 
     def toggle_input(self, *args):
@@ -103,6 +106,18 @@ class EncryptionApp:
             
             # Update file label to display the filename
             self.file_label.config(text="File: " + file_path)
+
+    def save_output(self):
+        output_text = self.output_text.get("1.0", "end-1c")
+        if not output_text:
+            messagebox.showerror("Error", "No output to save.")
+            return
+
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+        if file_path:
+            with open(file_path, "w") as file:
+                file.write(output_text)
+            messagebox.showinfo("Success", "Output saved successfully.")
                 
     def process(self):
         input_text = self.input_text.get("1.0", "end-1c")
