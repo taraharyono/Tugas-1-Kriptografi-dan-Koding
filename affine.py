@@ -36,6 +36,7 @@ def decrypt(cipher_text, m, b):
         
     return plain_text
     
+# Ini buat di GUI
 def isRelativePrime(m):
     if (math.gcd(m, 26) == 1):
         return True
