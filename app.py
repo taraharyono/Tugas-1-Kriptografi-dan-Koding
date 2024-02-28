@@ -1,4 +1,5 @@
 import tkinter as tk
+import base64
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
@@ -78,6 +79,9 @@ class EncryptionApp:
 
         self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
         self.save_button.grid(row=9, column=1, padx=5, pady=5)
+
+        self.content = None
+        self.isBinary = False
     
 
     def toggle_input(self, *args):
@@ -106,11 +110,32 @@ class EncryptionApp:
 
     def open_file(self):
         file_path = filedialog.askopenfilename()
-        if file_path:
+        if file_path[-4:] != ".txt":
+            self.isBinary = True
+        if file_path and not self.isBinary:
             with open(file_path, "r") as file:
                 content = file.read()
                 self.input_text.delete("1.0", tk.END)
                 self.input_text.insert("1.0", content)
+                ## print("base64" + base64_content)
+        elif self.isBinary:
+            with open(file_path, "rb") as file:
+                content = file.read()
+                ## base64_content = base64.b64encode(content).decode('utf-8')
+                self.input_text.delete("1.0", tk.END)
+                self.input_text.insert("1.0", content)
+
+                self.content = content
+
+                """
+                print(content)
+                i = 0
+                for byte in content:
+                    if i < 5:
+                        print(byte)
+                    i += 1
+                """
+
             
             # Update file label to display the filename
             self.file_label.config(text="File: " + file_path)
@@ -121,12 +146,16 @@ class EncryptionApp:
             messagebox.showerror("Error", "No output to save.")
             return
 
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
         if file_path:
-            with open(file_path, "w") as file:
-                file.write(output_text)
+            if not self.isBinary:  # If the data is text
+                with open(file_path, "w") as file:
+                    file.write(output_text)
+            else:  # If the data is binary
+                with open(file_path, "wb") as file:
+                    file.write(output_text.encode("utf-8"))
+
             messagebox.showinfo("Success", "Output saved successfully.")
-            self.file_content_label.config(text="File Content:\n" + content)
         else:
             self.file_label.grid_remove()
                 
@@ -136,7 +165,7 @@ class EncryptionApp:
         technique = self.technique_var.get()
         key = self.key_entry.get()
 
-        if not input_text:
+        if not input_text and not self.content:
             messagebox.showerror("Error", "Please enter some text.")
             return
 
@@ -156,10 +185,20 @@ class EncryptionApp:
             else:
                 encrypted_text = productCipher.decrypt(input_text, column_key, key)
         elif technique == "Extended Vigenere":
-            if choice == "Encrypt":
-                encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
+            if self.content == None:
+                if choice == "Encrypt":
+                    encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
+                else:
+                    encrypted_text = vigenere.extendedVigenereDecrypt(input_text, key)
             else:
-                encrypted_text = vigenere.extendedVigenereDecrypt(input_text, key)
+                if choice == "Encrypt":
+                    self.isBinary = True
+                    print(self.content)
+                    encrypted_text = repr(vigenere.extendedVigenereEncryptBytes(self.content, key))
+                    ## print(encrypted_text)
+                else:
+                    self.isBinary = True
+                    encrypted_text = repr(vigenere.extendedVigenereDecryptBytes(self.content, key))
         elif technique == "Playfair Cipher":
             if choice == "Encrypt":
                 encrypted_text = playfair.playfairEncrypt(input_text, key)
