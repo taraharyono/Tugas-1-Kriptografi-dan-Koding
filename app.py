@@ -218,7 +218,6 @@ class EncryptionApp:
         if not key:
             messagebox.showerror("Error", "Please enter a key.")
             return
-
         if technique == "Vigenere Standard Cipher":
             if not key.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
@@ -238,9 +237,6 @@ class EncryptionApp:
                 encrypted_text = productCipher.decrypt(input_text, column_key, key)
         elif technique == "Extended Vigenere Cipher":
             if self.content == None:
-                if not input_text.isalpha():
-                    messagebox.showerror("Error", "Input must contain only letters.")
-                    return
                 if choice == "Encrypt":
                     encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
                     print(encrypted_text)
@@ -257,9 +253,6 @@ class EncryptionApp:
                     self.byteArray = vigenere.extendedVigenereDecryptBytes(self.content, key)
                 self.download_label.grid(row=9, column=1, padx=5, pady=5)
         elif technique == "Playfair Cipher":
-            if not key.isalpha():
-                messagebox.showerror("Error", "Input must contain only letters.")
-                return
             if choice == "Encrypt":
                 encrypted_text = playfair.playfairEncrypt(input_text, key)
             else:
