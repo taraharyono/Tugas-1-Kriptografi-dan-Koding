@@ -127,6 +127,7 @@ class EncryptionApp:
         self.content = None
         self.isBinary = False
         self.byteArray = None
+        self.defaultExtension = ".txt"
     
 
     def toggle_input(self, *args):
@@ -174,6 +175,7 @@ class EncryptionApp:
         file_path = filedialog.askopenfilename()
         if file_path[-4:] != ".txt":
             self.isBinary = True
+            self.defaultExtension = file_path[-4:]
         if file_path and not self.isBinary:
             with open(file_path, "r") as file:
                 content = file.read()
@@ -198,8 +200,7 @@ class EncryptionApp:
         if not output_text and not self.isBinary:
             messagebox.showerror("Error", "No output to save.")
             return
-
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
+        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("Text files", "*.txt"), ("All files", "*.*"), ("PNG", "*.png"), ("GIF", "*.gif"), ("MP4", "*.mp4")])
         if file_path:
             if not self.isBinary:  # If the data is text
                 with open(file_path, "w") as file:
