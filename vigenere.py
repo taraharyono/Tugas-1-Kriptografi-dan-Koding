@@ -25,18 +25,9 @@ def extendedVigenereEncryptBytes(byte_data, key):
         encrypted_byte = (byte + key_byte) % 256
         encrypted_bytes.append(encrypted_byte)
     return encrypted_bytes
-    """
-    encrypted_bytes = bytes()
-    i = 0
-    for byte in byte_data:
-        encrypted_byte = (byte + ord(key[i%len(key)])) % 256
-        encrypted_bytes += bytes([encrypted_byte])
-        i += 1
-    print(encrypted_bytes)
-    return encrypted_bytes
-    """
 
 def extendedVigenereDecryptBytes(byte_data, key):
+    print(byte_data)
     decrypted_bytes = bytearray()
     key_length = len(key)
     for i, byte in enumerate(byte_data):
@@ -44,16 +35,3 @@ def extendedVigenereDecryptBytes(byte_data, key):
         decrypted_byte = (byte - key_byte) % 256
         decrypted_bytes.append(decrypted_byte)
     return decrypted_bytes
-    """
-    print(byte_data)
-    decrypted_bytes = bytes()
-    i = 0
-    for byte in byte_data:
-        if i == 1:
-            print(byte)
-            print(key[i%len(key)])
-        decrypted_byte = (byte - ord(key[i%len(key)])) % 256
-        decrypted_bytes += bytes([decrypted_byte])
-        i += 1
-    return decrypted_bytes
-    """

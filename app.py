@@ -82,6 +82,7 @@ class EncryptionApp:
 
         self.content = None
         self.isBinary = False
+        self.byteArray = None
     
 
     def toggle_input(self, *args):
@@ -142,7 +143,7 @@ class EncryptionApp:
 
     def save_output(self):
         output_text = self.output_text.get("1.0", "end-1c")
-        if not output_text:
+        if not output_text and not self.isBinary:
             messagebox.showerror("Error", "No output to save.")
             return
 
@@ -153,7 +154,7 @@ class EncryptionApp:
                     file.write(output_text)
             else:  # If the data is binary
                 with open(file_path, "wb") as file:
-                    file.write(output_text.encode("utf-8"))
+                    file.write(self.byteArray)
 
             messagebox.showinfo("Success", "Output saved successfully.")
         else:
@@ -188,17 +189,17 @@ class EncryptionApp:
             if self.content == None:
                 if choice == "Encrypt":
                     encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
+                    print(encrypted_text)
                 else:
                     encrypted_text = vigenere.extendedVigenereDecrypt(input_text, key)
             else:
                 if choice == "Encrypt":
                     self.isBinary = True
-                    print(self.content)
-                    encrypted_text = repr(vigenere.extendedVigenereEncryptBytes(self.content, key))
-                    ## print(encrypted_text)
+                    ## print(self.content)
+                    self.byteArray = vigenere.extendedVigenereEncryptBytes(self.content, key)
                 else:
                     self.isBinary = True
-                    encrypted_text = repr(vigenere.extendedVigenereDecryptBytes(self.content, key))
+                    self.byteArray = vigenere.extendedVigenereDecryptBytes(self.content, key)
         elif technique == "Playfair Cipher":
             if choice == "Encrypt":
                 encrypted_text = playfair.playfairEncrypt(input_text, key)
@@ -208,8 +209,9 @@ class EncryptionApp:
             messagebox.showerror("Error", "Invalid technique selected.")
             return
 
-        self.output_text.delete("1.0", tk.END)
-        self.output_text.insert(tk.END, encrypted_text)
+        if not self.isBinary:
+            self.output_text.delete("1.0", tk.END)
+            self.output_text.insert(tk.END, encrypted_text)
         
     def validate_column_key(self, new_text):
         try:
