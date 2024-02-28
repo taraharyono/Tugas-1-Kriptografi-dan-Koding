@@ -3,7 +3,7 @@ import base64
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
-## from PIL import Image, ImageTk
+from PIL import Image, ImageTk
 ## from cryptography.fernet import Fernet
 import pyperclip
 import standardVigenere
@@ -29,11 +29,11 @@ class EncryptionApp:
         # self.canvas.grid(row=0, column=0, columnspan=4, rowspan=4, sticky="nsew")
                         
         # Load and display image
-        ## image = Image.open("anya.png")
-        ## photo = ImageTk.PhotoImage(image)
-        ## self.image_label = ttk.Label(master, image=photo)
-        ## self.image_label.image = photo
-        ## self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
+        image = Image.open("anya.png")
+        photo = ImageTk.PhotoImage(image)
+        self.image_label = ttk.Label(master, image=photo)
+        self.image_label.image = photo
+        self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
         
         # Title label
         self.title_label = ttk.Label(master, text="Welcome to Classic Cryptographic Generator", font=("Helvetica", 16, "bold"))
