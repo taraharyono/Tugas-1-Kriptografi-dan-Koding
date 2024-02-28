@@ -3,7 +3,7 @@ import base64
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
-from PIL import Image, ImageTk
+## from PIL import Image, ImageTk
 ## from cryptography.fernet import Fernet
 import standardVigenere
 import productCipher
@@ -28,11 +28,11 @@ class EncryptionApp:
         # self.canvas.grid(row=0, column=0, columnspan=4, rowspan=4, sticky="nsew")
                         
         # Load and display image
-        image = Image.open("anya.png")
-        photo = ImageTk.PhotoImage(image)
-        self.image_label = ttk.Label(master, image=photo)
-        self.image_label.image = photo
-        self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
+        ## image = Image.open("anya.png")
+        ## photo = ImageTk.PhotoImage(image)
+        ## self.image_label = ttk.Label(master, image=photo)
+        ## self.image_label.image = photo
+        ## self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
         
         # Title label
         self.title_label = ttk.Label(master, text="Welcome to Classic Cryptographic Generator", font=("Helvetica", 16, "bold"))
@@ -116,6 +116,8 @@ class EncryptionApp:
         self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
         self.save_button.grid(row=10, column=1, padx=5, pady=5)
 
+        self.download_label = ttk.Label(master, text="Berhasil! Silahkan download hasil filenya!")
+
         self.content = None
         self.isBinary = False
         self.byteArray = None
@@ -124,7 +126,7 @@ class EncryptionApp:
     def toggle_input(self, *args):
         input_type = self.input_type_var.get()
         if input_type == "Text":
-            self.input_text.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
+            self.input_text.grid(row=2, column=1, padx=5, pady=5, columnspan=2)
             self.input_file_button.grid_remove()
             self.file_label.grid_remove()
             self.input_text.delete("1.0", tk.END)
@@ -179,15 +181,6 @@ class EncryptionApp:
                 self.input_text.insert("1.0", content)
 
                 self.content = content
-
-                """
-                print(content)
-                i = 0
-                for byte in content:
-                    if i < 5:
-                        print(byte)
-                    i += 1
-                """
 
             
             # Update file label to display the filename
@@ -244,23 +237,25 @@ class EncryptionApp:
             else:
                 encrypted_text = productCipher.decrypt(input_text, column_key, key)
         elif technique == "Extended Vigenere Cipher":
-            if not input_text.isalpha():
-                messagebox.showerror("Error", "Input must contain only letters.")
-                return
             if self.content == None:
+                if not input_text.isalpha():
+                    messagebox.showerror("Error", "Input must contain only letters.")
+                    return
                 if choice == "Encrypt":
                     encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
                     print(encrypted_text)
                 else:
                     encrypted_text = vigenere.extendedVigenereDecrypt(input_text, key)
             else:
+                self.output_label.grid_remove()
+                self.output_text.grid_remove()
                 if choice == "Encrypt":
                     self.isBinary = True
-                    ## print(self.content)
                     self.byteArray = vigenere.extendedVigenereEncryptBytes(self.content, key)
                 else:
                     self.isBinary = True
                     self.byteArray = vigenere.extendedVigenereDecryptBytes(self.content, key)
+                self.download_label.grid(row=9, column=1, padx=5, pady=5)
         elif technique == "Playfair Cipher":
             if not input_text.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
