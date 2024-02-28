@@ -195,12 +195,31 @@ class EncryptionApp:
             # Update file label to display the filename
             self.file_label.config(text="File: " + file_path)
 
+
+    def save_file_types(self):
+        filetypes = []
+        print("coba")
+        if not self.isBinary:
+            filetypes.append(("Text files", "*.txt"))
+        elif self.defaultExtension == ".png":
+            filetypes.append(("PNG", "*.png"))
+        elif self.defaultExtension == ".gif":
+            filetypes.append(("GIF", "*.gif"))
+        elif self.defaultExtension == ".mp4":
+            filetypes.append(("MP4", "*.mp4"))
+        else:
+            filetypes.append(("All files", "*.*"))
+        return filetypes
+
+    
+
     def save_output(self):
         output_text = self.output_text.get("1.0", "end-1c")
         if not output_text and not self.isBinary:
             messagebox.showerror("Error", "No output to save.")
             return
-        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("Text files", "*.txt"), ("All files", "*.*"), ("PNG", "*.png"), ("GIF", "*.gif"), ("MP4", "*.mp4")])
+        file_types = self.save_file_types()
+        file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=file_types)
         if file_path:
             if not self.isBinary:  # If the data is text
                 with open(file_path, "w") as file:
@@ -212,6 +231,7 @@ class EncryptionApp:
             messagebox.showinfo("Success", "Output saved successfully.")
         else:
             self.file_label.grid_remove()
+
                 
     def process(self):
         input_text = self.input_text.get("1.0", "end-1c")
