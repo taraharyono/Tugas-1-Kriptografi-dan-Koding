@@ -139,6 +139,7 @@ class EncryptionApp:
             self.file_content_label.grid_remove()
         elif input_type == "File":
             self.input_text.grid_remove()
+            self.input_label.grid_remove()
             self.input_file_button.grid(row=1, column=1, padx=5, pady=5, columnspan=2)
 
 
@@ -224,6 +225,8 @@ class EncryptionApp:
         if not key:
             messagebox.showerror("Error", "Please enter a key.")
             return
+        if technique != "Extended Vigenere Cipher" and self.isBinary:
+            messagebox.showerror("Error", "File format incompatible with chosen cipher!")
         if technique == "Vigenere Standard Cipher":
             if not key.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
@@ -251,6 +254,8 @@ class EncryptionApp:
             else:
                 self.output_label.grid_remove()
                 self.output_text.grid_remove()
+                self.base64_output_label.grid_remove()
+                self.base64_output_text.grid_remove()
                 if choice == "Encrypt":
                     self.isBinary = True
                     self.byteArray = vigenere.extendedVigenereEncryptBytes(self.content, key)
@@ -291,16 +296,14 @@ class EncryptionApp:
         if not self.isBinary:
             self.output_text.delete("1.0", tk.END)
             self.output_text.insert(tk.END, encrypted_text)
-            
-        self.output_text.delete("1.0", tk.END)
-        self.output_text.insert(tk.END, encrypted_text)
         
-        if technique != "Extended Vigenere Cipher":  # Check if it's not extended Vigenere
-            base64_cipher = base64.b64encode(encrypted_text.encode()).decode()  # Encode and decode to get string
-            
-            # Delete previous content and insert new content
-            self.base64_output_text.delete("1.0", tk.END)
-            self.base64_output_text.insert(tk.END, base64_cipher)
+        if technique == "Extended Vigenere Cipher":
+            if not self.content:
+                base64_cipher = base64.b64encode(encrypted_text.encode()).decode()
+                
+                # Delete previous content and insert new content
+                self.base64_output_text.delete("1.0", tk.END)
+                self.base64_output_text.insert(tk.END, base64_cipher)
         else:
             self.base64_output_text.delete("1.0", tk.END)
     def validate_column_key(self, new_text):
