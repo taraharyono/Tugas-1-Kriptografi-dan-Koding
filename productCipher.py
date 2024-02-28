@@ -15,10 +15,6 @@ def columnar_transposition_encrypt(plaintext, column_key):
             if (i == len(plaintext)):
                 break
         result.append(a)
-    for row in result:
-        for element in row:
-            print(element, end=" ")  # Print the element with a space separator
-        print()  #   
          
     # read result by row
     encrypted_text = ""
@@ -45,11 +41,6 @@ def columnar_transposition_decrypt(cipher_text, column_key):
             if (i == len(cipher_text)):
                 break
         result.append(a)
-            
-    for row in result:
-        for element in row:
-            print(element, end=" ")  # Print the element with a space separator
-        print()  #
         
     decrypted_text = ''
     for j in range(num_column):
