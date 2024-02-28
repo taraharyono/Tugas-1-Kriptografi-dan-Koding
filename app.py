@@ -78,7 +78,7 @@ class EncryptionApp:
 
         self.technique_var = tk.StringVar()
         self.technique_var.set("Vigenere Standard")
-        self.technique_menu = ttk.OptionMenu(master, self.technique_var, "Vigenere Standard", "Vigenere Standard Cipher", "Extended Vigenere Cipher", "Playfair Cipher","Product Cipher", "Affine Cipher", "Autokey Vigenere Cipher", command=self.toggle_additional_key)
+        self.technique_menu = ttk.OptionMenu(master, self.technique_var, "Vigenere Standard Cipher", "Vigenere Standard Cipher", "Extended Vigenere Cipher", "Playfair Cipher","Product Cipher", "Affine Cipher", "Autokey Vigenere Cipher", command=self.toggle_additional_key)
         self.technique_menu.grid(row=5, column=1, padx=5, pady=5)
 
         # Key Input
@@ -220,7 +220,7 @@ class EncryptionApp:
             return
 
         if technique == "Vigenere Standard Cipher":
-            if not input_text.isalpha():
+            if not key.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
                 return
             if choice == "Encrypt":
@@ -228,7 +228,7 @@ class EncryptionApp:
             else:
                 encrypted_text = standardVigenere.decrypt(input_text, key)
         elif technique == "Product Cipher":
-            if not input_text.isalpha():
+            if not key.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
                 return
             column_key = int(self.column_key_entry.get())
@@ -257,7 +257,7 @@ class EncryptionApp:
                     self.byteArray = vigenere.extendedVigenereDecryptBytes(self.content, key)
                 self.download_label.grid(row=9, column=1, padx=5, pady=5)
         elif technique == "Playfair Cipher":
-            if not input_text.isalpha():
+            if not key.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
                 return
             if choice == "Encrypt":
@@ -278,7 +278,7 @@ class EncryptionApp:
             else:
                 encrypted_text = affine.decrypt(input_text, key_a, key_b)
         elif technique == "Autokey Vigenere Cipher":
-            if not input_text.isalpha():
+            if not key.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
                 return
             if choice == "Encrypt":
