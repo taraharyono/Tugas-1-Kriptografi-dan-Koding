@@ -132,6 +132,8 @@ class EncryptionApp:
     def toggle_additional_key(self, *args):
         technique = self.technique_var.get()
         if technique == "Product Cipher":
+            self.key_b_label.grid_remove()
+            self.key_b_entry.grid_remove()
             self.key_label.config(text="Key :")
             self.column_key_label.grid()
             self.column_key_entry.grid()
