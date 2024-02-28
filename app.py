@@ -112,9 +112,15 @@ class EncryptionApp:
 
         self.output_text = tk.Text(master, height=5, width=40)
         self.output_text.grid(row=9, column=1, padx=5, pady=5, columnspan=2)
+        
+        self.base64_output_label = ttk.Label(master, text="Base64 Output:")
+        self.base64_output_label.grid(row=10, column=0, padx=5, pady=5, sticky="w")
+
+        self.base64_output_text = tk.Text(master, height=5, width=40)
+        self.base64_output_text.grid(row=10, column=1, padx=5, pady=5, columnspan=2)
 
         self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
-        self.save_button.grid(row=10, column=1, padx=5, pady=5)
+        self.save_button.grid(row=11, column=1, padx=5, pady=5)
 
         self.download_label = ttk.Label(master, text="Berhasil! Silahkan download hasil filenya!")
 
@@ -292,7 +298,18 @@ class EncryptionApp:
         if not self.isBinary:
             self.output_text.delete("1.0", tk.END)
             self.output_text.insert(tk.END, encrypted_text)
+            
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert(tk.END, encrypted_text)
         
+        if technique != "Extended Vigenere Cipher":  # Check if it's not extended Vigenere
+            base64_cipher = base64.b64encode(encrypted_text.encode()).decode()  # Encode and decode to get string
+            
+            # Delete previous content and insert new content
+            self.base64_output_text.delete("1.0", tk.END)
+            self.base64_output_text.insert(tk.END, base64_cipher)
+        else:
+            self.base64_output_text.delete("1.0", tk.END)
     def validate_column_key(self, new_text):
         try:
             if new_text == "":

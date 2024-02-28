@@ -60,6 +60,9 @@ def encrypt(plain_text, column_key, vigenere_key):
     return encrypted_text
 
 def decrypt(cipher_text, column_key, vigenere_key):
+    cipher_text = cipher_text.lower()
+    cipher_text = ''.join(char for char in cipher_text if char.isalpha())
+    key = key.lower()
     decrypted_text = columnar_transposition_decrypt(cipher_text, column_key)
     
     decrypted_text = standardVigenere.decrypt(decrypted_text, vigenere_key)
