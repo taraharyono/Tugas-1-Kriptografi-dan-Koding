@@ -327,14 +327,11 @@ class EncryptionApp:
         if not self.isBinary:
             self.output_text.delete("1.0", tk.END)
             self.output_text.insert(tk.END, encrypted_text)
-        
-        if technique == "Extended Vigenere Cipher":
-            if not self.content:
-                base64_cipher = base64.b64encode(encrypted_text.encode()).decode()
-                
-                # Delete previous content and insert new content
-                self.base64_output_text.delete("1.0", tk.END)
-                self.base64_output_text.insert(tk.END, base64_cipher)
+            base64_cipher = base64.b64encode(encrypted_text.encode()).decode()
+            
+            # Delete previous content and insert new content
+            self.base64_output_text.delete("1.0", tk.END)
+            self.base64_output_text.insert(tk.END, base64_cipher)      
         else:
             self.base64_output_text.delete("1.0", tk.END)
     def validate_column_key(self, new_text):
