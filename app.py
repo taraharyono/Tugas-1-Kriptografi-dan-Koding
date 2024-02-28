@@ -5,6 +5,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 ## from PIL import Image, ImageTk
 ## from cryptography.fernet import Fernet
+import pyperclip
 import standardVigenere
 import productCipher
 import vigenere
@@ -112,6 +113,9 @@ class EncryptionApp:
 
         self.output_text = tk.Text(master, height=5, width=40)
         self.output_text.grid(row=9, column=1, padx=5, pady=5, columnspan=2)
+
+        self.copy_button = ttk.Button(master, text="Copy to Clipboard", command=self.copy_to_clipboard)
+        self.copy_button.grid(row=9, column=3, padx=5, pady=5)
         
         self.base64_output_label = ttk.Label(master, text="Base64 Output:")
         self.base64_output_label.grid(row=10, column=0, padx=5, pady=5, sticky="w")
@@ -128,6 +132,12 @@ class EncryptionApp:
         self.isBinary = False
         self.byteArray = None
         self.defaultExtension = ".txt"
+    
+
+    def copy_to_clipboard(self):
+        output_text = self.output_text.get("1.0", tk.END)
+        pyperclip.copy(output_text)
+        messagebox.showinfo("Copied", "Output copied to clipboard.")
     
 
     def toggle_input(self, *args):
