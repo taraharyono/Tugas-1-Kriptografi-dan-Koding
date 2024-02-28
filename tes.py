@@ -1,3 +1,3 @@
 import math
 
-print(math.gcd(26,7))
+print(math.ceil(5/3))
