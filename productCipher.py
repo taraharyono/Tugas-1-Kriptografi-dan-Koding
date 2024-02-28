@@ -80,7 +80,7 @@ def decrypt(cipher_text, column_key, vigenere_key):
 
 # print(encrypt("departemen teknik informatika itb", 6, "sony"))
 # print(decrypt("vrcsaskbmycwvjnybiagjganlhcbrp", 6, "sony"))
-print(columnar_transposition_encrypt("masterpieces", 3))
-print(columnar_transposition_decrypt(columnar_transposition_encrypt("masterpieces", 3), 3))
+# print(columnar_transposition_encrypt("masterpieces", 3))
+# print(columnar_transposition_decrypt(columnar_transposition_encrypt("masterpieces", 3), 3))
 # harusnya ini meearcspetis
 

@@ -61,11 +61,11 @@ def normalizeChar(letter):
     n = ord(letter) - 97
     return n
 
-print(encrypt("negara penghasil minyak mentah di dunia", "indo"))
-print(decrypt("vrjoeeveegwefosmavjmszcndmlqbdbqqd", "indo"))
+# print(encrypt("negara penghasil minyak mentah di dunia", "indo"))
+# print(decrypt("vrjoeeveegwefosmavjmszcndmlqbdbqqd", "indo"))
 
-while True:
-    plain_text = input("Enter the plaintext: ")
-    key = input("Enter the key: ")
-    cipher_text = encrypt(plain_text, key)
-    print("Encrypted Text:", cipher_text)
+# while True:
+#     plain_text = input("Enter the plaintext: ")
+#     key = input("Enter the key: ")
+#     cipher_text = encrypt(plain_text, key)
+#     print("Encrypted Text:", cipher_text)

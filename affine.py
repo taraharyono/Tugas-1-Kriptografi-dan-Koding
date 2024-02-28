@@ -59,5 +59,5 @@ def normalizeChar(letter):
     n = ord(letter) - 97
     return n
 
-print(encrypt("But every decision for something is a decision against something else", 3, 6))
-print(decrypt("czolned", 7, 10))
+# print(encrypt("But every decision for something is a decision against something else", 3, 6))
+# print(decrypt("czolned", 7, 10))
