@@ -1,4 +1,5 @@
 import tkinter as tk
+import base64
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
@@ -114,6 +115,10 @@ class EncryptionApp:
 
         self.save_button = ttk.Button(master, text="Save Output", command=self.save_output)
         self.save_button.grid(row=10, column=1, padx=5, pady=5)
+
+        self.content = None
+        self.isBinary = False
+        self.byteArray = None
     
 
     def toggle_input(self, *args):
@@ -158,27 +163,52 @@ class EncryptionApp:
 
     def open_file(self):
         file_path = filedialog.askopenfilename()
-        if file_path:
+        if file_path[-4:] != ".txt":
+            self.isBinary = True
+        if file_path and not self.isBinary:
             with open(file_path, "r") as file:
                 content = file.read()
                 self.input_text.delete("1.0", tk.END)
                 self.input_text.insert("1.0", content)
+                ## print("base64" + base64_content)
+        elif self.isBinary:
+            with open(file_path, "rb") as file:
+                content = file.read()
+                ## base64_content = base64.b64encode(content).decode('utf-8')
+                self.input_text.delete("1.0", tk.END)
+                self.input_text.insert("1.0", content)
+
+                self.content = content
+
+                """
+                print(content)
+                i = 0
+                for byte in content:
+                    if i < 5:
+                        print(byte)
+                    i += 1
+                """
+
             
             # Update file label to display the filename
             self.file_label.config(text="File: " + file_path)
 
     def save_output(self):
         output_text = self.output_text.get("1.0", "end-1c")
-        if not output_text:
+        if not output_text and not self.isBinary:
             messagebox.showerror("Error", "No output to save.")
             return
 
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt"), ("All files", "*.*")])
         if file_path:
-            with open(file_path, "w") as file:
-                file.write(output_text)
+            if not self.isBinary:  # If the data is text
+                with open(file_path, "w") as file:
+                    file.write(output_text)
+            else:  # If the data is binary
+                with open(file_path, "wb") as file:
+                    file.write(self.byteArray)
+
             messagebox.showinfo("Success", "Output saved successfully.")
-            self.file_content_label.config(text="File Content:\n" + content)
         else:
             self.file_label.grid_remove()
                 
@@ -188,7 +218,7 @@ class EncryptionApp:
         technique = self.technique_var.get()
         key = self.key_entry.get()
 
-        if not input_text:
+        if not input_text and not self.content:
             messagebox.showerror("Error", "Please enter some text.")
             return
 
@@ -217,10 +247,20 @@ class EncryptionApp:
             if not input_text.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
                 return
-            if choice == "Encrypt":
-                encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
+            if self.content == None:
+                if choice == "Encrypt":
+                    encrypted_text = vigenere.extendedVigenereEncrypt(input_text, key)
+                    print(encrypted_text)
+                else:
+                    encrypted_text = vigenere.extendedVigenereDecrypt(input_text, key)
             else:
-                encrypted_text = vigenere.extendedVigenereDecrypt(input_text, key)
+                if choice == "Encrypt":
+                    self.isBinary = True
+                    ## print(self.content)
+                    self.byteArray = vigenere.extendedVigenereEncryptBytes(self.content, key)
+                else:
+                    self.isBinary = True
+                    self.byteArray = vigenere.extendedVigenereDecryptBytes(self.content, key)
         elif technique == "Playfair Cipher":
             if not input_text.isalpha():
                 messagebox.showerror("Error", "Input must contain only letters.")
@@ -254,8 +294,9 @@ class EncryptionApp:
             messagebox.showerror("Error", "Invalid technique selected.")
             return
 
-        self.output_text.delete("1.0", tk.END)
-        self.output_text.insert(tk.END, encrypted_text)
+        if not self.isBinary:
+            self.output_text.delete("1.0", tk.END)
+            self.output_text.insert(tk.END, encrypted_text)
         
     def validate_column_key(self, new_text):
         try:
