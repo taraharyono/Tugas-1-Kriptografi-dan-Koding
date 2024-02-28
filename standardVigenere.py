@@ -31,7 +31,6 @@ def decrypt(cipher, key):
             if i == len(cipher):
                break
     return plain
-    # plain = plain.upper()
 
 def separate(string):
     separated_string = ''

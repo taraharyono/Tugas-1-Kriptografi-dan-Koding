@@ -3,8 +3,7 @@ import math
 
 # Rumus enkripsi -> C = mP + b (mod 26)
 def encrypt(plain_text, m, b):
-    # isRelativePrime()
-    # if isRelativePrime(m):
+    # isRelativePrime() in GUI
     
     # removing chars other than letters
     cipher_text = ''
@@ -22,6 +21,8 @@ def encrypt(plain_text, m, b):
     
     
 def decrypt(cipher_text, m, b):
+    # isRelativePrime in GUI
+    
     # removing chars other than letters
     plain_text = ''
     cipher_text = cipher_text.lower()
@@ -58,5 +59,5 @@ def normalizeChar(letter):
     n = ord(letter) - 97
     return n
 
-print(encrypt("kriptoz", 7, 10))
+print(encrypt("But every decision for something is a decision against something else", 3, 6))
 print(decrypt("czolned", 7, 10))
