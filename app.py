@@ -277,7 +277,7 @@ class EncryptionApp:
             key_a = int(key)
             key_b = int(self.key_b_entry.get())
             if not affine.isRelativePrime(key_a):
-                messagebox.showerror("Error", "Key a must ne relative prime to 26")
+                messagebox.showerror("Error", "Key (a) must be relative prime to 26")
                 return
             if choice == "Encrypt":
                 encrypted_text = affine.encrypt(input_text, key_a, key_b)
