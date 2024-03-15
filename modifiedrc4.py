@@ -3,10 +3,13 @@ import base64
 # Key-Scheduling Algorithm
 def KSA(key):
     # inisialisasi larik
+    len_key = len(key)
+    key = key.encode()
     sbox = list(range(256))
     j = 0
     for i in range(256):
-        j = (j + sbox[i] + key[i % len(key)]) % 256
+        # Menggabungkan dengan konsep extended vigenere
+        j = (j + sbox[i] + key[i % len(key)] + ord(chr(key[i%len_key]))) % 256
         # Pertukarkan nilai sbox[i] dan sbox[j]
         sbox[i], sbox[j] = sbox[j], sbox[i]
     return sbox
@@ -19,7 +22,9 @@ def PGRA(sbox, length):
     for _ in range(length):
         i = (i + 1) % 256
         j = (j + sbox[i]) % 256
+         # Pertukarkan nilai sbox[i] dan sbox[l]
         sbox[i], sbox[j] = sbox[j], sbox[i]
+
         keystream_byte = sbox[(sbox[i] + sbox[j]) % 256]
         keystream.append(keystream_byte)
     return keystream
@@ -43,14 +48,13 @@ plaintext = "hilmibaskara"
 key = "wiu"
 
 plaintext_bytes = plaintext.encode()
-key_bytes = key.encode()
 
-encrypted_text = rc4_encrypt(plaintext_bytes, key_bytes)
+encrypted_text = rc4_encrypt(plaintext_bytes, key)
 print("Encrypted text:", encrypted_text)
 
 encrypted_text_base64 = base64.b64encode(encrypted_text)
 
 print("Encrypted text (Base64):", encrypted_text_base64.decode())
 
-decrypted_text = rc4_decrypt(encrypted_text, key_bytes)
+decrypted_text = rc4_decrypt(encrypted_text, key)
 print("Decrypted text:", decrypted_text.decode())
