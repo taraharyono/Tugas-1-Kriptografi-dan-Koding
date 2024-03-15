@@ -34,7 +34,7 @@ class EncryptionApp:
         ## photo = ImageTk.PhotoImage(image)
         ## self.image_label = ttk.Label(master, image=photo)
         ## self.image_label.image = photo
-        self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
+        ## self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
         
         # Title label
         self.title_label = ttk.Label(master, text="Welcome to Classic Cryptographic Generator", font=("Helvetica", 16, "bold"))
@@ -323,7 +323,7 @@ class EncryptionApp:
                 encrypted_text = autokeyVigenere.decrypt(input_text, key)
         elif technique == "Modified RC4":
             if self.content == None:
-                encrypted_text = modifiedrc4.RC4(input_text, key)
+                encrypted_text = modifiedrc4.rc4_encrypt(input_text, key)
             else:
                 self.output_label.grid_remove()
                 self.output_text.grid_remove()
