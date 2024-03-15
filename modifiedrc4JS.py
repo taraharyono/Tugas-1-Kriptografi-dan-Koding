@@ -55,16 +55,16 @@ def RC4_text(plaintext, key):
 
 
 
-# Example usage:
-plaintext = "hilmibaskara"
-key = "wiu"
+# # Example usage:
+# plaintext = "hilmibaskara"
+# key = "wiu"
 
-encrypted_text = RC4_text(plaintext, key)
-print("Encrypted:", encrypted_text)
+# encrypted_text = RC4_text(plaintext, key)
+# print("Encrypted:", encrypted_text)
 
-# Convert encrypted text to Base64
-encrypted_base64 = base64.b64encode(encrypted_text.encode()).decode()
-print("Encrypted Base64:", encrypted_base64)
+# # Convert encrypted text to Base64
+# encrypted_base64 = base64.b64encode(encrypted_text.encode()).decode()
+# print("Encrypted Base64:", encrypted_base64)
 
-decrypted_text = RC4_text(encrypted_text, key)
-print("Decrypted:", decrypted_text)
+# decrypted_text = RC4_text(encrypted_text, key)
+# print("Decrypted:", decrypted_text)

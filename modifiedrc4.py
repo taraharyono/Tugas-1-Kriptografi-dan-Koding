@@ -44,17 +44,17 @@ def rc4_encrypt(text, key):
 def rc4_decrypt(encrypted_text, key):
     return rc4_encrypt(encrypted_text, key)  # Dekripsi dan Enkripsi sama saja
 
-plaintext = "hilmibaskara"
-key = "wiu"
+# plaintext = "hilmibaskara"
+# key = "wiu"
 
-plaintext_bytes = plaintext.encode()
+# plaintext_bytes = plaintext.encode()
 
-encrypted_text = rc4_encrypt(plaintext_bytes, key)
-print("Encrypted text:", encrypted_text)
+# encrypted_text = rc4_encrypt(plaintext_bytes, key)
+# print("Encrypted text:", encrypted_text)
 
-encrypted_text_base64 = base64.b64encode(encrypted_text)
+# encrypted_text_base64 = base64.b64encode(encrypted_text)
 
-print("Encrypted text (Base64):", encrypted_text_base64.decode())
+# print("Encrypted text (Base64):", encrypted_text_base64.decode())
 
-decrypted_text = rc4_decrypt(encrypted_text, key)
-print("Decrypted text:", decrypted_text.decode())
+# decrypted_text = rc4_decrypt(encrypted_text, key)
+# print("Decrypted text:", decrypted_text.decode())
