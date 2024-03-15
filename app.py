@@ -3,7 +3,7 @@ import base64
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
-from PIL import Image, ImageTk
+## from PIL import Image, ImageTk
 ## from cryptography.fernet import Fernet
 import pyperclip
 import standardVigenere
@@ -30,10 +30,10 @@ class EncryptionApp:
         # self.canvas.grid(row=0, column=0, columnspan=4, rowspan=4, sticky="nsew")
                         
         # Load and display image
-        image = Image.open("anya.png")
-        photo = ImageTk.PhotoImage(image)
-        self.image_label = ttk.Label(master, image=photo)
-        self.image_label.image = photo
+        ## image = Image.open("anya.png")
+        ## photo = ImageTk.PhotoImage(image)
+        ## self.image_label = ttk.Label(master, image=photo)
+        ## self.image_label.image = photo
         self.image_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5, sticky='w')
         
         # Title label
@@ -322,7 +322,17 @@ class EncryptionApp:
             else:
                 encrypted_text = autokeyVigenere.decrypt(input_text, key)
         elif technique == "Modified RC4":
-            print("oke")
+            if self.content == None:
+                encrypted_text = modifiedrc4.RC4(input_text, key)
+            else:
+                self.output_label.grid_remove()
+                self.output_text.grid_remove()
+                self.base64_output_label.grid_remove()
+                self.base64_output_text.grid_remove()
+
+                self.isBinary = True
+                self.byteArray = modifiedrc4.RC4File(self.content, key)
+                self.download_label.grid(row=9, column=1, padx=5, pady=5)
         else:
             messagebox.showerror("Error", "Invalid technique selected.")
             return
