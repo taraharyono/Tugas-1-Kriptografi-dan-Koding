@@ -15,7 +15,7 @@ def KSA(key):
     return sbox
 
 # Pseudo-random generation algorithm (PRGA)
-def PGRA(sbox, length):
+def PRGA(sbox, length):
     i = 0
     j = 0
     keystream = []
@@ -34,7 +34,7 @@ def rc4_encrypt(text, key):
     # KSA
     sbox = KSA(key)
     # PRGA
-    keystream = PGRA(sbox, len(text))
+    keystream = PRGA(sbox, len(text))
     encrypted_text = bytearray()
     for i in range(len(text)):
         encrypted_text.append(text[i] ^ keystream[i])
