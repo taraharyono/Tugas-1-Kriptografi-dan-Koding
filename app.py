@@ -13,6 +13,7 @@ import playfair
 import affine
 import autokeyVigenere
 import modifiedrc4
+import modifiedrc4JS
 
 class EncryptionApp:
     def __init__(self, master):
@@ -80,7 +81,7 @@ class EncryptionApp:
 
         self.technique_var = tk.StringVar()
         self.technique_var.set("Vigenere Standard")
-        self.technique_menu = ttk.OptionMenu(master, self.technique_var, "Vigenere Standard Cipher", "Vigenere Standard Cipher", "Extended Vigenere Cipher", "Playfair Cipher","Product Cipher", "Affine Cipher", "Autokey Vigenere Cipher", "Modified RC4", command=self.toggle_additional_key)
+        self.technique_menu = ttk.OptionMenu(master, self.technique_var, "Modified RC4", "Vigenere Standard Cipher", "Extended Vigenere Cipher", "Playfair Cipher","Product Cipher", "Affine Cipher", "Autokey Vigenere Cipher", "Modified RC4", command=self.toggle_additional_key)
         self.technique_menu.grid(row=5, column=1, padx=5, pady=5)
 
         # Key Input
@@ -214,6 +215,8 @@ class EncryptionApp:
             filetypes.append(("Text files", "*.txt"))
         elif self.defaultExtension == ".png":
             filetypes.append(("PNG", "*.png"))
+        elif self.defaultExtension == ".pdf":
+            filetypes.append(("PDF", "*.pdf"))
         elif self.defaultExtension == ".gif":
             filetypes.append(("GIF", "*.gif"))
         elif self.defaultExtension == ".mp4":
@@ -323,7 +326,7 @@ class EncryptionApp:
                 encrypted_text = autokeyVigenere.decrypt(input_text, key)
         elif technique == "Modified RC4":
             if self.content == None:
-                encrypted_text = modifiedrc4.rc4_encrypt(input_text.encode(), key)
+                encrypted_text = modifiedrc4JS.RC4_text(input_text, key)
             else:
                 self.output_label.grid_remove()
                 self.output_text.grid_remove()
