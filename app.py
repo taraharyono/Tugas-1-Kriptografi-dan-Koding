@@ -257,7 +257,7 @@ class EncryptionApp:
         if not key:
             messagebox.showerror("Error", "Please enter a key.")
             return
-        if technique != "Extended Vigenere Cipher" and self.isBinary:
+        if technique not in ["Extended Vigenere Cipher", "Modified RC4"] and self.isBinary:
             messagebox.showerror("Error", "File format incompatible with chosen cipher!")
         if technique == "Vigenere Standard Cipher":
             if not key.isalpha():
@@ -323,7 +323,7 @@ class EncryptionApp:
                 encrypted_text = autokeyVigenere.decrypt(input_text, key)
         elif technique == "Modified RC4":
             if self.content == None:
-                encrypted_text = modifiedrc4.rc4_encrypt(input_text, key)
+                encrypted_text = modifiedrc4.rc4_encrypt(input_text.encode(), key)
             else:
                 self.output_label.grid_remove()
                 self.output_text.grid_remove()
@@ -331,7 +331,7 @@ class EncryptionApp:
                 self.base64_output_text.grid_remove()
 
                 self.isBinary = True
-                self.byteArray = modifiedrc4.RC4File(self.content, key)
+                self.byteArray = modifiedrc4.rc4_encrypt(self.content, key)
                 self.download_label.grid(row=9, column=1, padx=5, pady=5)
         else:
             messagebox.showerror("Error", "Invalid technique selected.")
@@ -341,7 +341,8 @@ class EncryptionApp:
             self.output_text.delete("1.0", tk.END)
             self.output_text.insert(tk.END, encrypted_text)
             base64_cipher = base64.b64encode(encrypted_text.encode()).decode()
-            
+            print(base64_cipher)
+              
             # Delete previous content and insert new content
             self.base64_output_text.delete("1.0", tk.END)
             self.base64_output_text.insert(tk.END, base64_cipher)      
